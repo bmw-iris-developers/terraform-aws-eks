@@ -1,6 +1,6 @@
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "6.0.2"
+  version = "14.0.0"
 
   cluster_name                               = var.cluster_prefix
   subnets                                    = concat(var.private_subnets, var.public_subnets)
@@ -19,6 +19,12 @@ module "eks" {
 
   cluster_enabled_log_types     = var.cluster_enabled_log_types
   cluster_log_retention_in_days = var.cluster_log_retention_in_days
+
+  workers_group_defaults = {
+    ami_id = "ami-08010169493706a28",
+    root_volume_type = "gp2"
+  }
+  wait_for_cluster_cmd = "until curl -k -s $ENDPOINT/healthz >/dev/null; do sleep 4; done"
 }
 
 resource "aws_security_group" "all_worker_additional" {
@@ -103,13 +109,13 @@ resource "aws_iam_role" "cluster_admin" {
 
 resource "aws_iam_role_policy_attachment" "cluster_admin_AmazonEKSClusterPolicy" {
   count      = var.enable_default_roles ? 1 : 0
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  policy_arn = "arn:aws-cn:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.cluster_admin[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_admin_AmazonEKSServicePolicy" {
   count      = var.enable_default_roles ? 1 : 0
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+  policy_arn = "arn:aws-cn:iam::aws:policy/AmazonEKSServicePolicy"
   role       = aws_iam_role.cluster_admin[0].name
 }
 
@@ -122,13 +128,13 @@ resource "aws_iam_role" "cluster_view" {
 
 resource "aws_iam_role_policy_attachment" "cluster_view_AmazonEKSClusterPolicy" {
   count      = var.enable_default_roles ? 1 : 0
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  policy_arn = "arn:aws-cn:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.cluster_view[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_view_AmazonEKSServicePolicy" {
   count      = var.enable_default_roles ? 1 : 0
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+  policy_arn = "arn:aws-cn:iam::aws:policy/AmazonEKSServicePolicy"
   role       = aws_iam_role.cluster_view[0].name
 }
 
