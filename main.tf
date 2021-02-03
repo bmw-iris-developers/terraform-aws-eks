@@ -24,7 +24,6 @@ module "eks" {
     ami_id = "ami-08010169493706a28",
     root_volume_type = "gp2"
   }
-  wait_for_cluster_cmd = "until curl -k -s $ENDPOINT/healthz >/dev/null; do sleep 4; done"
 }
 
 resource "aws_security_group" "all_worker_additional" {
