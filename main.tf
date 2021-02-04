@@ -25,6 +25,7 @@ module "eks" {
     root_volume_type = "gp2"
   }
   wait_for_cluster_cmd = "until curl -k -s $ENDPOINT/healthz >/dev/null; do sleep 4; done"
+  manage_aws_auth=false
 }
 
 resource "aws_security_group" "all_worker_additional" {
