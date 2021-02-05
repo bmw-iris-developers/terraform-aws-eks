@@ -21,7 +21,7 @@ module "eks" {
   cluster_log_retention_in_days = var.cluster_log_retention_in_days
 
   workers_group_defaults = {
-    ami_id = "ami-08010169493706a28",
+    ami_id = "ami-07f3fffad039f5d11",
     root_volume_type = "gp2"
   }
   wait_for_cluster_cmd = "until curl -k -s $ENDPOINT/healthz >/dev/null; do sleep 4; done"
